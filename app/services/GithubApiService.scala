@@ -9,6 +9,7 @@ import play.mvc.Http
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Failure, Success, Try}
 
 class GithubApiService @Inject() (ws: WSClient) {
   val githubApiUrl = "https://api.github.com"
@@ -53,7 +54,7 @@ class GithubApiService @Inject() (ws: WSClient) {
       }
     }
   }
-  def getRepositoriesAtPage(projectName: String, currentPage: Int): Future[WSGitHubProjectsSummary] = {
+  def getRepositoriesAtPage(projectName: String, currentPage: Int): Future[Try[WSGitHubProjectsSummary]] = {
     val futureResponse = ws.url(s"$githubApiUrl/search/repositories?q=$projectName&per_page=10&page=$currentPage").get()
 
     futureResponse.flatMap { response =>
@@ -62,10 +63,10 @@ class GithubApiService @Inject() (ws: WSClient) {
           val parsingResult = Json.parse(response.body).validate[WSGitHubProjectsSummary]
           parsingResult.fold(
             parsingFailure => Future.failed(new RuntimeException(parsingFailure.toString())),
-            (gitHubProjectSummary: WSGitHubProjectsSummary) => Future.successful(gitHubProjectSummary)
+            (gitHubProjectSummary: WSGitHubProjectsSummary) => Future(Success(gitHubProjectSummary))
           )
         }
-        case _ => Future.failed(new RuntimeException(s"Unexpected response status ${response.status}"))
+        case _ => Future(Failure(new RuntimeException(s"Unexpected response status ${response.status}")))
       }
     }
   }

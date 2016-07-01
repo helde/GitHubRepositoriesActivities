@@ -1,6 +1,7 @@
 package controllers
 
 import javax.inject.Inject
+
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc.{Action, Controller}
@@ -8,6 +9,7 @@ import services.GithubApiService
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Failure, Success}
 
 class GitHubApiController @Inject() (githubApiService: GithubApiService) extends Controller {
 
@@ -36,7 +38,12 @@ class GitHubApiController @Inject() (githubApiService: GithubApiService) extends
       Future(Redirect(routes.GitHubApiController.searchGithubProject()))
     } else {
       githubApiService.getRepositoriesAtPage(projectName, currentPage).map { gitHubProjects =>
-        Ok(views.html.selectProject(projectName, gitHubProjects, currentPage, 10))
+        gitHubProjects match {
+          case Success(project) =>
+            Ok(views.html.selectProject(projectName, project, currentPage, 10))
+          case Failure(e) =>
+            Redirect(routes.GitHubApiController.searchGithubProject())
+        }
       }
     }
   }
