@@ -1,0 +1,39 @@
+@import "_global.less";
+@import "_searchBar.less";
+
+#content {
+    text-align: center;
+
+    h2 {
+        font-size: 36px;
+        text-align: center;
+    }
+
+    #stats-area {
+        text-align: center;
+        padding-bottom: 10px;
+        border-bottom: 1px solid @borderGrey;
+
+        .stat {
+            display: inline-block;
+            &:nth-child(1) {
+                margin-right: 25px;
+            }
+        }
+    }
+
+    #committers-area {
+        margin-top: 15px;
+        margin-bottom: 20px;
+        text-align: center;
+
+        .committer {
+            min-width: 300px;
+            display: inline-block;
+            margin: 10px;
+            border: 1px solid @borderGrey;
+            padding: 7px 8px;
+        }
+    }
+}
+

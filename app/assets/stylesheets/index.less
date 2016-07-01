@@ -1,0 +1,54 @@
+@import "_global.less";
+
+#header {
+    text-align: center;
+    line-height: 32px;
+}
+
+#content {
+    width: 50%;
+    margin-right: auto;
+    margin-left: auto;
+
+    .search-text {
+        margin-top: 50px;
+
+        .search-icon {
+            display: inline-block;
+            vertical-align: middle;
+            margin-bottom: 8px;
+        }
+
+         h2 {
+            line-height: 50px;
+            margin: 0;
+            display: inline-block;
+        }
+    }
+
+    #search-bar {
+        width: 83%;
+        min-height: 16px;
+        padding: 7px 8px;
+        margin-right: 5px;
+        font-size: 13px;
+        color: #333;
+        border: 1px solid @borderGrey;
+        outline: none;
+    }
+
+    #submit-button {
+        min-height: 16px;
+        padding: 7px 16px;
+        font-size: 13px;
+        font-weight: @bold;
+        background-color: @grey;
+        border: 1px solid @borderGrey;
+        outline: none;
+
+        &:hover {
+            cursor: pointer;
+            background-color: @darkGrey;
+        }
+    }
+}

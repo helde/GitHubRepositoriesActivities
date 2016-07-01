@@ -1,0 +1,93 @@
+@(
+    input: String,
+    githubProjects: models.WSGitHubProjectsSummary,
+    currentPage: Int,
+    pageLength: Int,
+    bound: Int = 5
+)
+
+@lowbound() = @{
+    ((currentPage.toDouble / bound).floor * bound) toInt
+}
+
+@highbound() = @{
+    if ((lowbound() + bound) * pageLength >= githubProjects.totalCount) {
+        githubProjects.totalCount / pageLength + 1
+    } else {
+        lowbound() + bound
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Title</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/searchResult.min.css")">
+    </head>
+    <body>
+        @views.html.templates.searchBar(Some(input))
+
+        <div id="total-results">@githubProjects.totalCount @if(githubProjects.totalCount > 1){repositories}else{repository} found</div>
+        <div id="results-area">
+        @githubProjects.projects.map { project =>
+            <div class="github-project">
+                <h3>
+                    <a class="full-name" href="@controllers.routes.GitHubApiController.projectAnAlytics(project.fullName)">
+                        @project.fullName
+                    </a>
+                </h3>
+                @if(project.description.isDefined) {
+                    <div class="description">@project.description.get</div>
+                }
+                <div class="project-footer">
+                    <div class="updated">Last updated @project.getFormatedDate</div>
+                    <div class="link-github">See <a class="url" href="@project.url">@project.fullName</a> on GitHub</div>
+                </div>
+            </div>
+        }
+        </div>
+
+        <div id="pagination-area">
+            <ul>
+                @if(currentPage == 1) {
+                    <li class="disabled"><a href="#">Previous</a></li>
+                } else {
+                    <li><a href="@controllers.routes.GitHubApiController.searchRepositoriesAtPage(input, currentPage-1)">Previous</a></li>
+                }
+
+                @if(currentPage < bound) {
+                    <li class="disabled"><a href="#">&laquo;</a></li>
+                } else {
+                    @if(lowbound() - bound <= 0) {
+                        <li><a href="@controllers.routes.GitHubApiController.searchRepositoriesAtPage(input, 1)">&laquo;</a></li>
+                    } else {
+                        <li><a href="@controllers.routes.GitHubApiController.searchRepositoriesAtPage(input, lowbound()-bound)">&laquo;</a></li>
+                    }
+                }
+
+                @for(i <- lowbound().max(1) until currentPage) {
+                    <li><a href="@controllers.routes.GitHubApiController.searchRepositoriesAtPage(input, i)">@i</a></li>
+                }
+
+                <li class="active"><a href="#">@currentPage</a></li>
+
+                @for(i <- currentPage+1 to highbound()) {
+                    <li><a href="@controllers.routes.GitHubApiController.searchRepositoriesAtPage(input, i)">@i</a></li>
+                }
+
+                @if(highbound() * pageLength <= githubProjects.totalCount && highbound() > currentPage && currentPage * pageLength != githubProjects.totalCount) {
+                    <li><a href="@controllers.routes.GitHubApiController.searchRepositoriesAtPage(input, highbound())">&raquo;</a></li>
+                } else {
+                    <li class="disabled"><a href="#">&raquo;</a></li>
+                }
+
+                @if(currentPage < highbound()) {
+                    <li><a href="@controllers.routes.GitHubApiController.searchRepositoriesAtPage(input, currentPage+1)">Next</a></li>
+                } else {
+                    <li class="disabled"><a href="#">Next</a></li>
+                }
+            </ul>
+        </div>
+    </body>
+</html>

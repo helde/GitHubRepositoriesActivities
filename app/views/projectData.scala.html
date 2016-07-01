@@ -1,0 +1,92 @@
+@(
+    gitHubProjectOpt: Option[models.GitHubProjectStats]
+)
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Github project data</title>
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/gitHubProject.min.css")">
+</head>
+<body>
+    @views.html.templates.searchBar(None)
+
+    @gitHubProjectOpt.map { gitHubProject =>
+        <div id="content">
+            <h2>@gitHubProject.fullName</h2>
+            <div id="stats-area">
+                <div class="stat">@gitHubProject.totalCommits commits</div>
+                <div class="stat">@gitHubProject.contributors.size contributors</div>
+            </div>
+
+            <div id="committers-area">
+                @gitHubProject.contributors.map { contributor =>
+                <div class="committer">
+                    <div class="email">@contributor.author.login</div>
+                    <div class="commit-stat">Commit number: @contributor.totalCommits</div>
+                </div>
+                }
+            </div>
+
+            <div id="contributor-impact" style="height: 300px; width: 100%;"></div>
+            <div id="commit-projection" style="height: 300px; width: 100%;"></div>
+        </div>
+    }.getOrElse {
+        <div id="content">
+            <p>This repository is empty.</p>
+        </div>
+    }
+
+    <script src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            @if(gitHubProjectOpt.isDefined) {
+                var chart = new CanvasJS.Chart("contributor-impact", {
+                    theme: "theme2",
+                    title:{
+                        text: "Contributors impact based on the 100 latest commits"
+                    },
+                    animationEnabled: true,
+                    data: [
+                    {
+                        // "column", "bar", "area", "spline", "pie" ...
+                        type: "pie",
+                        dataPoints: [
+                            @gitHubProjectOpt.get.committers.map { committer =>
+                                { label: "@committer.email", y: @committer.nbCommits },
+                            }
+                        ]
+                    }
+                    ]
+                });
+                chart.render();
+
+                CanvasJS.addColorSet("custom",
+                    ["#4c5c5f"]
+                );
+                var chart = new CanvasJS.Chart("commit-projection", {
+                    colorSet: "custom",
+                    theme: "theme1",
+                    title:{
+                        text: "Commits projection based on the 100 latest commits"
+                    },
+                    animationEnabled: true,
+                    data: [
+                    {
+                        // "column", "bar", "area", "spline", "pie" ...
+                        type: "column",
+                        dataPoints: [
+                            @gitHubProjectOpt.get.commitProjection.map { commit =>
+                                { label: "@commit.date", y: @commit.nbCommits },
+                            }
+                        ]
+                    }
+                    ]
+                });
+                chart.render();
+            }
+        }
+    </script>
+</body>
+</html>

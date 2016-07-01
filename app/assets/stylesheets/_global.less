@@ -1,0 +1,24 @@
+@import "utils/_colors.less";
+@import "utils/_fonts.less";
+
+body {
+    margin: 0;
+    color: @textGrey;
+
+    #header {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        background-color: @grey;
+        border-bottom: 1px solid @darkGrey;
+    }
+
+    a {
+        font-weight: @regular;
+        text-decoration: none;
+        color: @blueLink;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

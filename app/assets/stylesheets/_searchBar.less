@@ -1,0 +1,40 @@
+@import "utils/_colors.less";
+@import "utils/_fonts.less";
+
+.search-bar-area {
+    text-align: right;
+    margin-right: 10px;
+
+    .home-icon {
+        float: left;
+        margin-left: 20px;
+    }
+
+     .search-form {
+        .search-bar {
+            width: 20%;
+            min-height: 16px;
+            padding: 7px 8px;
+            margin-right: 5px;
+            font-size: 13px;
+            color: #333;
+            border: 1px solid @borderGrey;
+            outline: none;
+        }
+
+        .submit-button {
+            min-height: 16px;
+            padding: 7px 8px;
+            font-size: 13px;
+            font-weight: @bold;
+            background-color: @grey;
+            border: 1px solid @borderGrey;
+            outline: none;
+
+            &:hover {
+                cursor: pointer;
+                background-color: @darkGrey;
+            }
+        }
+    }
+}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Homework</title>
+        <meta name="description" content="Homework for Zengularity. It allows you to search for a public GitHub repository."/>
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/index.min.css")">
+    </head>
+    <body>
+        <div id="header">
+            <div class="header-title">HOMEWORK</div>
+        </div>
+
+        <div id="content">
+            <div class="search-text">
+                <img class="search-icon" src="@routes.Assets.at("images/search-icon.png")" width="30" height="30" />
+                <h2>Search for a GitHub repository</h2>
+            </div>
+            <form id="search-form" method="POST" action="@controllers.routes.GitHubApiController.searchRepositories()">
+                <input type="text" name="projectName" id="search-bar" placeholder="Search GitHub repository">
+                <button type="submit" id="submit-button">Search</button>
+            </form>
+        </div>
+    </body>
+</html>

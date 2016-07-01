@@ -1,0 +1,102 @@
+@import "_global.less";
+@import "_searchBar.less";
+
+#total-results {
+    text-align: center;
+    color: @textGrey;
+    font-weight: @bold;
+    font-size: 18px;
+    padding: 15px 8px;
+    border-bottom: 1px solid @borderGrey;
+}
+
+#results-area {
+    text-align: center;
+    padding: 10px;
+
+    .github-project {
+        width: 75%;
+        display: block;
+        border-bottom: 1px solid @borderGrey;
+        font-size: 13px;
+        padding: 10px;
+        margin: auto;
+        color:  @textGrey;
+        text-align: left;
+
+        h3 {
+            margin-top: 15px;
+            margin-bottom: 10px;
+            .full-name {
+                font-size: 24px;
+            }
+        }
+
+        .description {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .project-footer {
+            .updated {
+                display: inline-block;
+                text-align: left;
+            }
+
+            .link-github {
+                display: inline-block;
+                float: right;
+            }
+        }
+    }
+}
+
+#pagination-area {
+    text-align: center;
+    ul {
+        display: inline-block;
+
+        li {
+            display: inline-block;
+            background-color: @grey;
+            border: 1px solid @borderGrey;
+            padding: 9px;
+
+            &:hover {
+                cursor: pointer;
+                background-color: @darkGrey;
+            }
+
+            a {
+                font-weight: @bold;
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+
+            &.disabled {
+                cursor: default;
+
+                &:hover {
+                    background-color: @grey;
+                }
+
+                a {
+                    opacity: 0.6;
+                    pointer-events: none;
+                    &:hover {
+                        cursor: default;
+                    }
+                }
+            }
+
+            &.active {
+                background-color: @blueLink;
+
+                a {
+                    color: white;
+                }
+            }
+        }
+    }
+}

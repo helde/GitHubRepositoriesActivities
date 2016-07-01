@@ -1,0 +1,14 @@
+@(input: Option[String])
+
+<div id="header">
+    <div class="search-bar-area">
+        <a href="@controllers.routes.GitHubApiController.searchGithubProject()">
+            <img class="home-icon" src="@routes.Assets.at("images/home-icon.png")" width="30" height="30" />
+        </a>
+
+        <form class="search-form" method="POST" action="@controllers.routes.GitHubApiController.searchRepositories()">
+            <input type="text" name="projectName" class="search-bar" placeholder="Search GitHub repository" value="@input.map(s => s)">
+            <button type="submit" class="submit-button">Search</button>
+        </form>
+    </div>
+</div>
